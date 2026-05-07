@@ -54,12 +54,12 @@ export default function Index() {
             >
               Investors
             </button>
-            <button
-              onClick={() => scrollToSection("features")}
+            <a
+              href="/resources-library"
               className="transition-colors hover:text-foreground"
             >
               Resources
-            </button>
+            </a>
           </nav>
 
           {/* Right Actions */}
