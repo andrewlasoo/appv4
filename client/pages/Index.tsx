@@ -42,12 +42,12 @@ export default function Index() {
             >
               Home
             </button>
-            <button
-              onClick={() => scrollToSection("product")}
+            <a
+              href="https://5-w-ai.vercel.app/upload"
               className="transition-colors hover:text-foreground"
             >
               Product
-            </button>
+            </a>
             <button
               onClick={() => scrollToSection("investors")}
               className="transition-colors hover:text-foreground"
@@ -149,12 +149,12 @@ export default function Index() {
                 Request Investor Demo
                 <ArrowRight className="h-4 w-4" />
               </a>
-              <button
-                onClick={() => scrollToSection("product")}
+              <a
+                href="https://5-w-ai.vercel.app/upload"
                 className="border border-input bg-background hover:bg-muted/50 rounded-full h-12 px-8 text-base font-semibold transition-colors flex items-center justify-center gap-2"
               >
                 See How It Works
-              </button>
+              </a>
             </div>
 
             {/* Metrics */}
@@ -600,10 +600,13 @@ export default function Index() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-slate-900 hover:bg-white/90 rounded-md h-12 px-8 font-semibold transition-colors flex items-center justify-center gap-2">
+              <a
+                href="https://5-w-ai.vercel.app/upload"
+                className="bg-white text-slate-900 hover:bg-white/90 rounded-md h-12 px-8 font-semibold transition-colors flex items-center justify-center gap-2"
+              >
                 Get Started
                 <ArrowRight className="h-4 w-4" />
-              </button>
+              </a>
               <a
                 href="mailto:mark@5ws.io"
                 className="border-2 border-white bg-transparent text-white hover:bg-white/10 rounded-md h-12 px-8 font-semibold transition-colors flex items-center justify-center"
