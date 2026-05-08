@@ -1,5 +1,14 @@
 import { useState } from "react";
-import { Menu, X, Moon, BookOpen, ExternalLink } from "lucide-react";
+import {
+  Menu,
+  X,
+  Moon,
+  BookOpen,
+  ExternalLink,
+  LogOut,
+  Trash2,
+  Upload,
+} from "lucide-react";
 
 interface Resource {
   id: number;
@@ -10,6 +19,14 @@ interface Resource {
   link: string;
 }
 
+interface Whitepaper {
+  id: number;
+  title: string;
+  organization: string;
+  year: number;
+  description: string;
+}
+
 const resources: Resource[] = [
   {
     id: 1,
@@ -17,7 +34,7 @@ const resources: Resource[] = [
     type: "Annual Report",
     year: 2026,
     description:
-      "The most authoritative annual audit of humanitarian data availability. The 2026 edition reveals crisis-data availability dropped to 68%, IM staff were cut by 40% at major agencies, and organizations must 'do better with less.' Directly validates 5W.AI's efficiency proposition.",
+      "The most authoritative annual audit of humanitarian data availability. The 2026 edition reveals crisis-data availability dropped to 68%, IM staff were cut by 40% at major agencies.",
     link: "https://centre.humdata.org/the-state-of-open-humanitarian-data-2026/",
   },
   {
@@ -26,7 +43,7 @@ const resources: Resource[] = [
     type: "Annual Report",
     year: 2026,
     description:
-      "OCHA's flagship annual overview documents 239 million people in need, $23B funding requirement. The 2026 GHO explicitly prioritizes technology-driven accountability and data-driven coordination.",
+      "OCHA's flagship annual overview documents 239 million people in need, $23B funding requirement. Prioritizes technology-driven accountability.",
     link: "https://www.unocha.org/publications/report/world/global-humanitarian-overview-2026-enesfr",
   },
   {
@@ -35,16 +52,16 @@ const resources: Resource[] = [
     type: "Operational Guidance",
     year: 2024,
     description:
-      "UNHCR's authoritative operational guide on 3W/4W/5W databases as 'essential aspects of coordination.' Defines the WHO/WHAT/WHERE/WHEN/FOR WHOM framework 5W.AI is built around.",
+      "UNHCR's authoritative operational guide on 3W/4W/5W databases as essential aspects of coordination.",
     link: "https://emergency.unhcr.org/coordination-and-communication/information-management/emergency-information-management-coordination",
   },
   {
     id: 4,
     title: "The Coming Humanitarian Data Drought",
-    type: "Research Blog / Analysis",
+    type: "Research Blog",
     year: 2025,
     description:
-      "Documents how WFP primary data interviews dropped from 1.1M (2024) to 800K (2025). Makes the case for efficiency tools like 5W.AI that maximize output from reduced IM staff.",
+      "Documents how WFP primary data interviews dropped significantly. Makes the case for efficiency tools.",
     link: "https://www.cgdev.org/blog/coming-humanitarian-data-drought",
   },
   {
@@ -53,16 +70,16 @@ const resources: Resource[] = [
     type: "Research Report",
     year: 2025,
     description:
-      "The world's first baseline study of AI adoption in the humanitarian sector. Finds only 9% of humanitarian organizations are fully AI-ready but individual staff are experimenting daily.",
+      "The world's first baseline study of AI adoption in the humanitarian sector.",
     link: "https://www.humanitarianleadershipacademy.org/resources/humanitarian-ai-podcast-series-the-collection/",
   },
   {
     id: 6,
     title: "From Digital Promise to Frontline Practice",
-    type: "Flagship Policy Report",
+    type: "Policy Report",
     year: 2021,
     description:
-      "OCHA's landmark policy report on digital technologies in humanitarian action. Identifies data standardization, quality, and interoperability as key enablers - exactly the infrastructure 5W.AI provides.",
+      "OCHA's landmark policy report on digital technologies in humanitarian action.",
     link: "https://www.unocha.org/publications/report/world/digital-promise-frontline-practice-new-and-emerging-technologies-humanitarian-action",
   },
   {
@@ -71,7 +88,7 @@ const resources: Resource[] = [
     type: "Annual Report",
     year: 2025,
     description:
-      "Reveals that 89% of humanitarian funding flows through intermediaries with no public accountability trail. Directly documents the accountability vacuum 5W.AI's financial monitoring module addresses.",
+      "Reveals funding flow transparency issues and the accountability vacuum.",
     link: "https://alnap.hacdn.io/media/documents/GHA_Chapter_2_1606v3.pdf",
   },
   {
@@ -80,7 +97,7 @@ const resources: Resource[] = [
     type: "Policy Framework",
     year: 2023,
     description:
-      "Inter-agency agreement signed by 71 organizations committing to harmonized reporting requirements and increased funding transparency. Every 5W.AI client is likely a Grand Bargain signatory.",
+      "Inter-agency agreement signed by 71 organizations committing to harmonized reporting.",
     link: "https://interagencystandingcommittee.org/grand-bargain",
   },
   {
@@ -89,7 +106,7 @@ const resources: Resource[] = [
     type: "Podcast Series",
     year: 2024,
     description:
-      "The leading AI-for-good podcast series for the humanitarian sector. Episodes include applied AI use cases from IFRC, WFP, FAO, and UNHCR.",
+      "The leading AI-for-good podcast series with applied cases from IFRC, WFP, FAO.",
     link: "https://humanitarianaitoday.org/",
   },
   {
@@ -98,106 +115,90 @@ const resources: Resource[] = [
     type: "Podcast Mini-Series",
     year: 2025,
     description:
-      "Six-episode deep-dive series covering AI governance gaps, AI literacy barriers, and localization challenges. Positions responsible AI tools like 5W.AI as the needed solution.",
+      "Deep-dive series covering AI governance gaps and localization challenges.",
     link: "https://www.humanitarianleadershipacademy.org/resources/humanitarian-ai-podcast-series-the-collection/",
-  },
-  {
-    id: 11,
-    title: "The State of the World's Cash 2023",
-    type: "Flagship Report",
-    year: 2023,
-    description:
-      "Definitive state-of-the-sector report for cash and voucher assistance. Highlights the need for interoperable tracking systems and improved CVA reporting.",
-    link: "https://www.calpnetwork.org/collection/the-state-of-the-worlds-cash-2023-report/",
-  },
-  {
-    id: 12,
-    title: "Why the Future of Grand Bargain Aid Reforms Hinges on Accountability",
-    type: "Investigative Analysis",
-    year: 2024,
-    description:
-      "Documents how Grand Bargain self-reporting is 'impossible to verify'. Directly argues for verifiable, machine-readable reporting systems that replace subjective self-assessment.",
-    link: "https://www.thenewhumanitarian.org/news/2024/10/15/why-grand-bargain-future-hinges-accountability",
-  },
-  {
-    id: 13,
-    title: "Humanitarian AI Unpacked - Monthly Briefings 2025",
-    type: "Monthly Briefing Series",
-    year: 2025,
-    description:
-      "Monthly practitioner briefings on AI in the humanitarian sector. Covers the SAFE AI project (Standards and Assurance Framework for Ethical AI).",
-    link: "https://www.ukhih.org/news/humanitarian-ai-unpacked-march-2025/",
-  },
-  {
-    id: 14,
-    title: "Donor Crisis Prompts Rethink on Rules of Humanitarian Data Partnerships",
-    type: "Investigative News",
-    year: 2025,
-    description:
-      "Examines how the humanitarian funding crisis is pushing organizations toward risky private-sector data partnerships. Validates 5W.AI's humanitarian-native design.",
-    link: "https://genevasolutions.news/peace-humanitarian/donor-crisis-prompts-a-rethink-on-rules-of-collaboration-for-humanitarian-data-partnerships",
-  },
-  {
-    id: 15,
-    title: "Humanitarian Data Exchange (HDX)",
-    type: "Open Data Platform",
-    year: 2026,
-    description:
-      "The global open humanitarian data platform managing data for 22 active crises. Integration with HDX is a key 5W.AI roadmap feature.",
-    link: "https://data.humdata.org/",
-  },
-  {
-    id: 16,
-    title: "Data Collection in a Crisis: Best Practices for Humanitarian Aid",
-    type: "Practitioner Guide",
-    year: 2025,
-    description:
-      "Practitioner-focused guide on humanitarian data collection challenges. Highlights why offline data capture with robust sync and audit trail is critical.",
-    link: "https://www.surveycto.com/data-collection-quality/data-collection-in-humanitarian-aid/",
-  },
-  {
-    id: 17,
-    title: "Artificial Intelligence in Humanitarian Aid: A Review and Future Research Agenda",
-    type: "Peer-Reviewed Academic Review",
-    year: 2025,
-    description:
-      "Comprehensive peer-reviewed review of AI applications across the humanitarian programme cycle. Establishes the academic evidence base.",
-    link: "https://www.sciencedirect.com/science/article/pii/S0166497225002470",
-  },
-  {
-    id: 18,
-    title: "The Humanitarian Reset - IASC Examined",
-    type: "Policy Analysis",
-    year: 2025,
-    description:
-      "Analysis of the March 2025 IASC Humanitarian Reset. Calls for democratising data - promoting information systems designed by those closest to crisis-affected communities.",
-    link: "https://www.icvanetwork.org/humanitarianreset/",
-  },
-  {
-    id: 19,
-    title: "Rethinking Humanitarianism Podcast: The Aid Sector's Techno-Colonialism Problem",
-    type: "Audio / Video Podcast",
-    year: 2026,
-    description:
-      "Critical examination of AI and technology adoption in the humanitarian sector. Provides perspective on responsible AI implementation.",
-    link: "https://www.thenewhumanitarian.org/podcasts/2026/02/26/rethinking-humanitarianism-aid-sectors-techno-colonialism-problem",
-  },
-  {
-    id: 20,
-    title: "ICT4D Conference 2026 - Nairobi",
-    type: "Conference / Event",
-    year: 2026,
-    description:
-      "The 2026 ICT4D Conference in Nairobi has data as its primary theme. Explicitly covers 'AI's potential and pitfalls' and 'responsible data sharing.'",
-    link: "https://www.ict4dconference.org/",
   },
 ];
 
 export default function ResourcesLibrary() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+  const [whitepapers, setWhitepapers] = useState<Whitepaper[]>([
+    {
+      id: 1,
+      title: "Humanitarian Data Standards Framework",
+      organization: "5W.Ai Research Team",
+      year: 2026,
+      description:
+        "A comprehensive guide to implementing standardized data collection and reporting frameworks across humanitarian operations.",
+    },
+    {
+      id: 2,
+      title: "AI-Driven Data Validation in Crisis Response",
+      organization: "5W.Ai & OCHA Partnership",
+      year: 2025,
+      description:
+        "Technical whitepaper exploring AI-powered validation mechanisms for rapid data quality assurance.",
+    },
+    {
+      id: 3,
+      title: "Coordination Data Aggregation: Best Practices",
+      organization: "5W.Ai Research Team",
+      year: 2026,
+      description:
+        "Guide on aggregating data from multiple sources while maintaining integrity and standardization.",
+    },
+  ]);
+  const [newWhitepaper, setNewWhitepaper] = useState({
+    title: "",
+    organization: "",
+    year: new Date().getFullYear(),
+    description: "",
+  });
 
-  const scrollToSection = (id: string) => {
-    setMobileMenuOpen(false);
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoginError("");
+
+    if (username === "admin" && password === "B0ny0@%$") {
+      setIsLoggedIn(true);
+      setUsername("");
+      setPassword("");
+    } else {
+      setLoginError("Invalid credentials. Try admin / B0ny0@%$");
+    }
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUsername("");
+    setPassword("");
+  };
+
+  const handleAddWhitepaper = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (newWhitepaper.title && newWhitepaper.organization) {
+      setWhitepapers([
+        ...whitepapers,
+        {
+          id: Math.max(...whitepapers.map((wp) => wp.id), 0) + 1,
+          ...newWhitepaper,
+        },
+      ]);
+      setNewWhitepaper({
+        title: "",
+        organization: "",
+        year: new Date().getFullYear(),
+        description: "",
+      });
+    }
+  };
+
+  const handleDeleteWhitepaper = (id: number) => {
+    setWhitepapers(whitepapers.filter((wp) => wp.id !== id));
   };
 
   return (
@@ -205,12 +206,10 @@ export default function ResourcesLibrary() {
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-border/70 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div className="mx-auto flex h-16 w-full max-w-[1600px] items-center justify-between px-4 sm:px-6 lg:px-10">
-          {/* Logo */}
           <a href="/" className="text-2xl font-semibold tracking-tight">
             5W.Ai
           </a>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-12 text-[1.05rem] text-muted-foreground">
             <a href="/" className="transition-colors hover:text-foreground">
               Home
@@ -235,7 +234,6 @@ export default function ResourcesLibrary() {
             </a>
           </nav>
 
-          {/* Right Actions */}
           <div className="flex items-center gap-3">
             <button className="border border-input bg-background hover:bg-muted rounded-full h-11 px-3 sm:px-4 transition-colors flex items-center gap-2">
               <Moon className="h-4 w-4" />
@@ -249,7 +247,6 @@ export default function ResourcesLibrary() {
             </a>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden"
@@ -262,7 +259,6 @@ export default function ResourcesLibrary() {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
         {mobileMenuOpen && (
           <nav className="md:hidden border-t border-border/60 px-4 py-4">
             <div className="grid grid-cols-2 gap-2">
@@ -296,98 +292,288 @@ export default function ResourcesLibrary() {
       </header>
 
       <main className="min-h-screen bg-background text-foreground">
-        {/* Hero Section */}
-        <section className="border-b border-border bg-background/80">
-          <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-            <div className="flex items-start gap-4">
-              {/* Icon Card */}
-              <div className="rounded-xl border border-border bg-card p-3 flex-shrink-0">
-                <BookOpen className="h-5 w-5 text-primary" />
-              </div>
+        {/* Login Section */}
+        {!isLoggedIn && (
+          <section className="border-b border-border bg-background/80">
+            <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+              <div className="max-w-md mx-auto">
+                <div className="rounded-2xl border border-border bg-card p-8 shadow-forge">
+                  <h2 className="text-2xl font-bold mb-2">Admin Login</h2>
+                  <p className="text-muted-foreground mb-6">
+                    Sign in to manage whitepapers
+                  </p>
 
-              {/* Content */}
-              <div className="flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
-                  Resources
-                </p>
-                <h1 className="text-2xl font-bold tracking-tight sm:text-3xl mt-2">
-                  Supporting Resources
-                </h1>
-              </div>
+                  <form onSubmit={handleLogin} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Username
+                      </label>
+                      <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        placeholder="admin"
+                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
 
-              {/* Public View Badge */}
-              <div className="mt-4">
-                <div className="inline-flex items-center rounded-full border border-transparent bg-secondary text-secondary-foreground px-2.5 py-0.5 text-xs font-semibold hover:bg-secondary/80 transition-colors">
-                  Public View
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Password
+                      </label>
+                      <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        placeholder="••••••••"
+                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+
+                    {loginError && (
+                      <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm">
+                        {loginError}
+                      </div>
+                    )}
+
+                    <button
+                      type="submit"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg py-2 font-semibold transition-colors"
+                    >
+                      Sign In
+                    </button>
+
+                    <p className="text-xs text-muted-foreground text-center mt-4">
+                      Demo: admin / B0ny0@%$
+                    </p>
+                  </form>
                 </div>
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        {/* Resources Table Section */}
+        {/* Admin Header */}
+        {isLoggedIn && (
+          <section className="border-b border-border bg-background/80">
+            <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+                    Admin Dashboard
+                  </p>
+                  <h1 className="text-2xl font-bold tracking-tight sm:text-3xl mt-2">
+                    Whitepaper Management
+                  </h1>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-2 bg-background border border-border hover:bg-muted rounded-lg px-4 py-2 transition-colors"
+                >
+                  <LogOut className="h-4 w-4" />
+                  Logout
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Two Column Layout */}
         <section className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-          <div className="rounded-2xl border border-border bg-card/95 shadow-forge overflow-hidden">
-            {/* Table Header */}
-            <div className="border-b border-border/60 px-5 py-4">
-              <h2 className="text-sm font-semibold tracking-tight text-foreground">
-                5W.AI Supporting Resources
-              </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* Left Column - Whitepapers */}
+            <div>
+              <div className="mb-6">
+                <h2 className="text-xl font-bold mb-2">Whitepapers</h2>
+                <p className="text-muted-foreground text-sm">
+                  Technical publications and research papers from 5W.Ai
+                </p>
+              </div>
+
+              {/* Upload Section (Admin Only) */}
+              {isLoggedIn && (
+                <div className="mb-8 rounded-2xl border border-border bg-card/95 shadow-forge p-6">
+                  <h3 className="text-lg font-bold mb-4">Upload Whitepaper</h3>
+                  <form onSubmit={handleAddWhitepaper} className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Title
+                      </label>
+                      <input
+                        type="text"
+                        value={newWhitepaper.title}
+                        onChange={(e) =>
+                          setNewWhitepaper({
+                            ...newWhitepaper,
+                            title: e.target.value,
+                          })
+                        }
+                        placeholder="Whitepaper title"
+                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Organization
+                      </label>
+                      <input
+                        type="text"
+                        value={newWhitepaper.organization}
+                        onChange={(e) =>
+                          setNewWhitepaper({
+                            ...newWhitepaper,
+                            organization: e.target.value,
+                          })
+                        }
+                        placeholder="Organization name"
+                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Year
+                      </label>
+                      <input
+                        type="number"
+                        value={newWhitepaper.year}
+                        onChange={(e) =>
+                          setNewWhitepaper({
+                            ...newWhitepaper,
+                            year: parseInt(e.target.value),
+                          })
+                        }
+                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        Description
+                      </label>
+                      <textarea
+                        value={newWhitepaper.description}
+                        onChange={(e) =>
+                          setNewWhitepaper({
+                            ...newWhitepaper,
+                            description: e.target.value,
+                          })
+                        }
+                        placeholder="Whitepaper description"
+                        rows={4}
+                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                      />
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg py-2 font-semibold transition-colors flex items-center justify-center gap-2"
+                    >
+                      <Upload className="h-4 w-4" />
+                      Add Whitepaper
+                    </button>
+                  </form>
+                </div>
+              )}
+
+              {/* Whitepapers List */}
+              <div className="space-y-4">
+                {whitepapers.length === 0 ? (
+                  <div className="text-center py-8 text-muted-foreground">
+                    No whitepapers yet
+                  </div>
+                ) : (
+                  whitepapers.map((wp) => (
+                    <div
+                      key={wp.id}
+                      className="rounded-xl border border-border bg-card p-4 hover:shadow-forge transition-shadow"
+                    >
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <h3 className="font-bold text-foreground">
+                            {wp.title}
+                          </h3>
+                          <p className="text-sm text-muted-foreground mt-1">
+                            {wp.organization} • {wp.year}
+                          </p>
+                          <p className="text-sm text-muted-foreground mt-2">
+                            {wp.description}
+                          </p>
+                        </div>
+                        {isLoggedIn && (
+                          <button
+                            onClick={() => handleDeleteWhitepaper(wp.id)}
+                            className="flex-shrink-0 p-2 text-destructive hover:bg-destructive/10 rounded-lg transition-colors"
+                            title="Delete whitepaper"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
 
-            {/* Table */}
-            <div className="p-5 overflow-x-auto">
-              <table className="w-full min-w-[980px] text-left text-sm">
-                <thead>
-                  <tr className="border-b border-border text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                    <th className="py-3 pr-3">#</th>
-                    <th className="py-3 pr-4">Resource</th>
-                    <th className="py-3 pr-4">Type</th>
-                    <th className="py-3 pr-4">Year</th>
-                    <th className="py-3 pr-4">Why It Matters</th>
-                    <th className="py-3 pr-0">Link</th>
-                  </tr>
-                </thead>
-                <tbody>
+            {/* Right Column - Supporting Resources */}
+            <div>
+              <div className="mb-6">
+                <h2 className="text-xl font-bold mb-2">Supporting Resources</h2>
+                <p className="text-muted-foreground text-sm">
+                  Industry reports, research papers, and policy documents
+                </p>
+              </div>
+
+              <div className="rounded-2xl border border-border bg-card/95 shadow-forge overflow-hidden">
+                <div className="border-b border-border/60 px-5 py-4">
+                  <h3 className="text-sm font-semibold tracking-tight text-foreground">
+                    Resources
+                  </h3>
+                </div>
+
+                <div className="p-5 space-y-4 max-h-[800px] overflow-y-auto">
                   {resources.map((resource) => (
-                    <tr
+                    <div
                       key={resource.id}
-                      className="border-b border-border/60 align-top last:border-b-0"
+                      className="border-b border-border/60 pb-4 last:border-b-0"
                     >
-                      <td className="py-4 pr-3 font-semibold text-primary">
-                        {resource.id}
-                      </td>
-                      <td className="py-4 pr-4">
-                        <p className="font-medium text-foreground">
-                          {resource.title}
-                        </p>
-                      </td>
-                      <td className="py-4 pr-4">
-                        <div className="inline-flex items-center rounded-full border border-transparent bg-secondary text-secondary-foreground px-2.5 py-0.5 text-xs font-semibold hover:bg-secondary/80 transition-colors">
-                          {resource.type}
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="text-xs font-semibold text-primary">
+                              {resource.id}
+                            </span>
+                            <div className="inline-flex items-center rounded-full border border-transparent bg-secondary text-secondary-foreground px-2 py-0.5 text-xs font-semibold">
+                              {resource.type}
+                            </div>
+                            <span className="text-xs text-muted-foreground">
+                              {resource.year}
+                            </span>
+                          </div>
+                          <h4 className="font-bold text-foreground text-sm">
+                            {resource.title}
+                          </h4>
+                          <p className="text-xs text-muted-foreground mt-1">
+                            {resource.description}
+                          </p>
                         </div>
-                      </td>
-                      <td className="py-4 pr-4 text-muted-foreground">
-                        {resource.year}
-                      </td>
-                      <td className="py-4 pr-4 text-muted-foreground text-xs max-w-xs">
-                        {resource.description}
-                      </td>
-                      <td className="py-4 pr-0">
                         <a
                           href={resource.link}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 text-primary underline-offset-2 hover:underline transition-colors"
+                          className="flex-shrink-0 inline-flex items-center gap-1 text-primary hover:underline transition-colors text-xs"
                         >
                           <ExternalLink className="h-3 w-3" />
-                          Open
                         </a>
-                      </td>
-                    </tr>
+                      </div>
+                    </div>
                   ))}
-                </tbody>
-              </table>
+                </div>
+              </div>
             </div>
           </div>
         </section>
