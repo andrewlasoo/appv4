@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Menu,
   X,
@@ -121,38 +121,61 @@ const resources: Resource[] = [
   },
 ];
 
+const defaultWhitepapers: Whitepaper[] = [
+  {
+    id: 1,
+    title: "Humanitarian Data Standards Framework",
+    organization: "5W.Ai Research Team",
+    year: 2026,
+    description:
+      "A comprehensive guide to implementing standardized data collection and reporting frameworks across humanitarian operations.",
+  },
+  {
+    id: 2,
+    title: "AI-Driven Data Validation in Crisis Response",
+    organization: "5W.Ai & OCHA Partnership",
+    year: 2025,
+    description:
+      "Technical whitepaper exploring AI-powered validation mechanisms for rapid data quality assurance.",
+  },
+  {
+    id: 3,
+    title: "Coordination Data Aggregation: Best Practices",
+    organization: "5W.Ai Research Team",
+    year: 2026,
+    description:
+      "Guide on aggregating data from multiple sources while maintaining integrity and standardization.",
+  },
+];
+
 export default function ResourcesLibrary() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState("");
-  const [whitepapers, setWhitepapers] = useState<Whitepaper[]>([
-    {
-      id: 1,
-      title: "Humanitarian Data Standards Framework",
-      organization: "5W.Ai Research Team",
-      year: 2026,
-      description:
-        "A comprehensive guide to implementing standardized data collection and reporting frameworks across humanitarian operations.",
-    },
-    {
-      id: 2,
-      title: "AI-Driven Data Validation in Crisis Response",
-      organization: "5W.Ai & OCHA Partnership",
-      year: 2025,
-      description:
-        "Technical whitepaper exploring AI-powered validation mechanisms for rapid data quality assurance.",
-    },
-    {
-      id: 3,
-      title: "Coordination Data Aggregation: Best Practices",
-      organization: "5W.Ai Research Team",
-      year: 2026,
-      description:
-        "Guide on aggregating data from multiple sources while maintaining integrity and standardization.",
-    },
-  ]);
+  const [whitepapers, setWhitepapers] = useState<Whitepaper[]>([]);
+
+  // Load whitepapers from localStorage on mount
+  useEffect(() => {
+    const savedWhitepapers = localStorage.getItem("whitepapers");
+    if (savedWhitepapers) {
+      try {
+        setWhitepapers(JSON.parse(savedWhitepapers));
+      } catch {
+        // If parsing fails, use defaults
+        setWhitepapers(defaultWhitepapers);
+      }
+    } else {
+      // First time load - use defaults
+      setWhitepapers(defaultWhitepapers);
+    }
+  }, []);
+
+  // Save whitepapers to localStorage whenever they change
+  useEffect(() => {
+    localStorage.setItem("whitepapers", JSON.stringify(whitepapers));
+  }, [whitepapers]);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [newWhitepaper, setNewWhitepaper] = useState({
     title: "",
