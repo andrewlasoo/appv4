@@ -25,6 +25,7 @@ interface Whitepaper {
   organization: string;
   year: number;
   description: string;
+  pdfUrl?: string;
 }
 
 const resources: Resource[] = [
@@ -152,12 +153,15 @@ export default function ResourcesLibrary() {
         "Guide on aggregating data from multiple sources while maintaining integrity and standardization.",
     },
   ]);
+  const [showLoginModal, setShowLoginModal] = useState(false);
   const [newWhitepaper, setNewWhitepaper] = useState({
     title: "",
     organization: "",
     year: new Date().getFullYear(),
     description: "",
+    pdfUrl: "",
   });
+  const [pdfFile, setPdfFile] = useState<File | null>(null);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -165,10 +169,11 @@ export default function ResourcesLibrary() {
 
     if (username === "admin" && password === "B0ny0@%$") {
       setIsLoggedIn(true);
+      setShowLoginModal(false);
       setUsername("");
       setPassword("");
     } else {
-      setLoginError("Invalid credentials. Try admin / B0ny0@%$");
+      setLoginError("Invalid credentials");
     }
   };
 
@@ -181,11 +186,19 @@ export default function ResourcesLibrary() {
   const handleAddWhitepaper = (e: React.FormEvent) => {
     e.preventDefault();
     if (newWhitepaper.title && newWhitepaper.organization) {
+      // In a real app, you'd upload the PDF to a server
+      // For now, we'll create a local blob URL for demo purposes
+      let pdfUrl = "";
+      if (pdfFile) {
+        pdfUrl = URL.createObjectURL(pdfFile);
+      }
+
       setWhitepapers([
         ...whitepapers,
         {
           id: Math.max(...whitepapers.map((wp) => wp.id), 0) + 1,
           ...newWhitepaper,
+          pdfUrl,
         },
       ]);
       setNewWhitepaper({
@@ -193,7 +206,9 @@ export default function ResourcesLibrary() {
         organization: "",
         year: new Date().getFullYear(),
         description: "",
+        pdfUrl: "",
       });
+      setPdfFile(null);
     }
   };
 
@@ -239,6 +254,23 @@ export default function ResourcesLibrary() {
               <Moon className="h-4 w-4" />
               <span className="hidden lg:inline text-sm">Dark</span>
             </button>
+            {!isLoggedIn && (
+              <button
+                onClick={() => setShowLoginModal(true)}
+                className="bg-background border border-primary text-primary hover:bg-primary/5 rounded-full h-11 px-5 sm:px-7 text-sm font-semibold transition-colors"
+              >
+                Admin
+              </button>
+            )}
+            {isLoggedIn && (
+              <button
+                onClick={handleLogout}
+                className="bg-background border border-border text-foreground hover:bg-muted rounded-full h-11 px-5 sm:px-7 text-sm font-semibold transition-colors flex items-center gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </button>
+            )}
             <a
               href="mailto:mark@5ws.io"
               className="bg-primary text-primary-foreground hover:bg-primary/90 rounded-full h-11 px-5 sm:px-7 text-sm font-semibold transition-colors"
@@ -292,90 +324,89 @@ export default function ResourcesLibrary() {
       </header>
 
       <main className="min-h-screen bg-background text-foreground">
-        {/* Login Section */}
-        {!isLoggedIn && (
-          <section className="border-b border-border bg-background/80">
-            <div className="mx-auto w-full max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-              <div className="max-w-md mx-auto">
-                <div className="rounded-2xl border border-border bg-card p-8 shadow-forge">
-                  <h2 className="text-2xl font-bold mb-2">Admin Login</h2>
-                  <p className="text-muted-foreground mb-6">
-                    Sign in to manage whitepapers
-                  </p>
+        {/* Page Header */}
+        <section className="border-b border-border bg-background/80">
+          <div className="mx-auto w-full max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+            <div className="flex items-start gap-4">
+              <div className="rounded-xl border border-border bg-card p-3 flex-shrink-0">
+                <BookOpen className="h-5 w-5 text-primary" />
+              </div>
 
-                  <form onSubmit={handleLogin} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        Username
-                      </label>
-                      <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        placeholder="admin"
-                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
+              <div className="flex-1">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+                  Resources
+                </p>
+                <h1 className="text-2xl font-bold tracking-tight sm:text-3xl mt-2">
+                  Supporting Resources
+                </h1>
+              </div>
 
-                    <div>
-                      <label className="block text-sm font-medium mb-2">
-                        Password
-                      </label>
-                      <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="••••••••"
-                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                      />
-                    </div>
-
-                    {loginError && (
-                      <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm">
-                        {loginError}
-                      </div>
-                    )}
-
-                    <button
-                      type="submit"
-                      className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg py-2 font-semibold transition-colors"
-                    >
-                      Sign In
-                    </button>
-
-                    <p className="text-xs text-muted-foreground text-center mt-4">
-                      Demo: admin / B0ny0@%$
-                    </p>
-                  </form>
+              <div className="mt-4">
+                <div className="inline-flex items-center rounded-full border border-transparent bg-secondary text-secondary-foreground px-2.5 py-0.5 text-xs font-semibold hover:bg-secondary/80 transition-colors">
+                  Public View
                 </div>
               </div>
             </div>
-          </section>
-        )}
+          </div>
+        </section>
 
-        {/* Admin Header */}
-        {isLoggedIn && (
-          <section className="border-b border-border bg-background/80">
-            <div className="mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
-                    Admin Dashboard
-                  </p>
-                  <h1 className="text-2xl font-bold tracking-tight sm:text-3xl mt-2">
-                    Whitepaper Management
-                  </h1>
-                </div>
+        {/* Login Modal */}
+        {showLoginModal && (
+          <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
+            <div className="rounded-2xl border border-border bg-card p-8 shadow-lg max-w-md w-full">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-2xl font-bold">Admin Login</h2>
                 <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-2 bg-background border border-border hover:bg-muted rounded-lg px-4 py-2 transition-colors"
+                  onClick={() => setShowLoginModal(false)}
+                  className="text-muted-foreground hover:text-foreground"
                 >
-                  <LogOut className="h-4 w-4" />
-                  Logout
+                  <X className="h-6 w-6" />
                 </button>
               </div>
+
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Username
+                  </label>
+                  <input
+                    type="text"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    placeholder="Enter username"
+                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    autoFocus
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">
+                    Password
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter password"
+                    className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                  />
+                </div>
+
+                {loginError && (
+                  <div className="p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm">
+                    {loginError}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg py-2 font-semibold transition-colors"
+                >
+                  Sign In
+                </button>
+              </form>
             </div>
-          </section>
+          </div>
         )}
 
         {/* Two Column Layout */}
@@ -468,6 +499,25 @@ export default function ResourcesLibrary() {
                       />
                     </div>
 
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        PDF File
+                      </label>
+                      <input
+                        type="file"
+                        accept=".pdf"
+                        onChange={(e) =>
+                          setPdfFile(e.target.files?.[0] || null)
+                        }
+                        className="w-full px-4 py-2 rounded-lg border border-border bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                      />
+                      {pdfFile && (
+                        <p className="text-xs text-primary mt-2">
+                          Selected: {pdfFile.name}
+                        </p>
+                      )}
+                    </div>
+
                     <button
                       type="submit"
                       className="w-full bg-primary text-primary-foreground hover:bg-primary/90 rounded-lg py-2 font-semibold transition-colors flex items-center justify-center gap-2"
@@ -502,6 +552,16 @@ export default function ResourcesLibrary() {
                           <p className="text-sm text-muted-foreground mt-2">
                             {wp.description}
                           </p>
+                          {wp.pdfUrl && (
+                            <a
+                              href={wp.pdfUrl}
+                              download={`${wp.title}.pdf`}
+                              className="inline-flex items-center gap-1 text-primary hover:underline text-sm mt-3 transition-colors"
+                            >
+                              <ExternalLink className="h-3 w-3" />
+                              Download PDF
+                            </a>
+                          )}
                         </div>
                         {isLoggedIn && (
                           <button
