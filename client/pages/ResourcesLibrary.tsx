@@ -124,27 +124,12 @@ const resources: Resource[] = [
 const defaultWhitepapers: Whitepaper[] = [
   {
     id: 1,
-    title: "Humanitarian Data Standards Framework",
+    title: "The Reporting Paradox",
     organization: "5W.Ai Research Team",
     year: 2026,
     description:
-      "A comprehensive guide to implementing standardized data collection and reporting frameworks across humanitarian operations.",
-  },
-  {
-    id: 2,
-    title: "AI-Driven Data Validation in Crisis Response",
-    organization: "5W.Ai & OCHA Partnership",
-    year: 2025,
-    description:
-      "Technical whitepaper exploring AI-powered validation mechanisms for rapid data quality assurance.",
-  },
-  {
-    id: 3,
-    title: "Coordination Data Aggregation: Best Practices",
-    organization: "5W.Ai Research Team",
-    year: 2026,
-    description:
-      "Guide on aggregating data from multiple sources while maintaining integrity and standardization.",
+      "Between January 2025 and early 2026, humanitarian funding suffered the sharpest contraction on record. U.S. humanitarian aid alone dropped from approximately $14 billion in 2024 to $3.7 billion in 2025—a 74% collapse—while other traditional donors followed with their own cuts. By May 2025, at least 233,818 jobs had been lost across 153 humanitarian agencies, and 54% of NGOs operating across 55 countries reported staff layoffs. And yet reporting requirements have not gone away. If anything, the surviving funding is more conditional, more scrutinized, and more closely monitored than ever. This is the reporting paradox at the heart of the 2026 humanitarian sector—and it is precisely the gap that 5W.Ai is built to fill.",
+    pdfUrl: "/files/The-Reporting-Paradox.pdf",
   },
 ];
 
@@ -578,7 +563,7 @@ export default function ResourcesLibrary() {
                           {wp.pdfUrl && (
                             <a
                               href={wp.pdfUrl}
-                              download={`${wp.title}.pdf`}
+                              download
                               className="inline-flex items-center gap-1 text-primary hover:underline text-sm mt-3 transition-colors"
                             >
                               <ExternalLink className="h-3 w-3" />
